@@ -1,16 +1,4 @@
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  description: string;
-  category: string;
-  features: string[];
-  inStock: boolean;
-}
-
-export const sunglassesProducts: Product[] = [
+export const sunglassesProducts = [
   {
     id: 1,
     name: "Ray-Ban Aviator Classic",
@@ -75,7 +63,7 @@ export const sunglassesProducts: Product[] = [
   }
 ];
 
-export const eyeglassesProducts: Product[] = [
+export const eyeglassesProducts = [
   {
     id: 7,
     name: "Tom Ford Classic",

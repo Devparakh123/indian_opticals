@@ -1,22 +1,16 @@
 import React from 'react';
-import { ShoppingCart, Eye } from 'lucide-react';
+import { ShoppingCart, Eye, Check } from 'lucide-react';
+import { useCart } from '../contexts/CartContext';
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  description: string;
-  category: string;
-  features: string[];
-}
+const ProductCard = ({ product }) => {
+  const { addToCart, isInCart, getItemQuantity } = useCart();
+  const inCart = isInCart(product.id);
+  const quantity = getItemQuantity(product.id);
 
-interface ProductCardProps {
-  product: Product;
-}
+  const handleAddToCart = () => {
+    addToCart(product);
+  };
 
-export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
       <div className="relative overflow-hidden">
@@ -34,6 +28,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         {product.originalPrice && (
           <div className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded text-sm font-semibold">
             SALE
+          </div>
+        )}
+        {inCart && (
+          <div className="absolute top-4 left-4 bg-green-500 text-white px-2 py-1 rounded text-sm font-semibold flex items-center space-x-1">
+            <Check className="h-3 w-3" />
+            <span>In Cart ({quantity})</span>
           </div>
         )}
       </div>
@@ -64,12 +64,21 @@ export default function ProductCard({ product }: ProductCardProps) {
               <span className="text-gray-400 line-through text-sm">₹{product.originalPrice.toLocaleString()}</span>
             )}
           </div>
-          <button className="bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-amber-700 transition-colors flex items-center space-x-2">
-            <ShoppingCart className="h-4 w-4" />
-            <span>Add to Cart</span>
+          <button 
+            onClick={handleAddToCart}
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center space-x-2 ${
+              inCart 
+                ? 'bg-green-600 text-white hover:bg-green-700' 
+                : 'bg-amber-600 text-white hover:bg-amber-700'
+            }`}
+          >
+            {inCart ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}
+            <span>{inCart ? 'Added' : 'Add to Cart'}</span>
           </button>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default ProductCard;
